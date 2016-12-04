@@ -1,0 +1,258 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>at.priesch.coinmanager</groupId>
+    <artifactId>gui</artifactId>
+    <name>Coinmanager - GUI</name>
+    <version>1.0.1</version>
+
+    <properties>
+
+        <dist>../../dist</dist>
+        <dist.lib>${dist}/lib</dist.lib>
+        <dist.configuration>${dist}/configuration</dist.configuration>
+        <temp>temp</temp>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.jmx</groupId>
+                    <artifactId>jmxri</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.jdmk</groupId>
+                    <artifactId>jmxtools</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.jms</groupId>
+                    <artifactId>jms</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>ejb3-persistence</artifactId>
+            <version>3.3.2.Beta1</version>
+            <scope>compile</scope>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.193</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>at.priesch.coinmanager</groupId>
+            <artifactId>servicecomponents</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <description>GUI of Coinmanager</description>
+
+    <build>
+        <finalName>coinmanger-gui-${project.version}</finalName>
+
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeTypes>jar</includeTypes>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>${project.artifactId}</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+
+
+                                <echo>Mintmanager _Master Build File master build process: Entering {init}</echo>
+
+                                <tstamp/>
+
+                                <echo>-----------------------------------------------------</echo>
+                                <echo>Building: I-New CS IProvisioningr</echo>
+                                <echo>Destination: ${dist}</echo>
+                                <echo>-----------------------------------------------------</echo>
+
+                                <delete dir="${dist}"/>
+
+                                <mkdir dir="${dist.lib}"/>
+                                <mkdir dir="${dist.configuration}"/>
+
+                                <delete dir="${temp}"/>
+                                <mkdir dir="${temp}"/>
+                                <mkdir dir="${temp}/lib"/>
+
+                                <echo>Mintmanager _Master Build File master build process: Leaving {init}</echo>
+
+                                <echo>I-New CS IProvisioning master build process: Entering {assemble}</echo>
+
+                                <copy todir="${dist.lib}">
+                                    <fileset dir="target/lib">
+                                        <include name="*.jar"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${dist}">
+                                    <fileset dir=".">
+                                        <include name="*.sh"/>
+                                        <include name="*.bat"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${dist.lib}">
+                                    <fileset dir="../datamodel/target/">
+                                        <include name="*.jar"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${dist.lib}">
+                                    <fileset dir="../gui/target/">
+                                        <include name="*.jar"/>
+                                    </fileset>
+                                </copy>
+                                -->
+
+                                <copy todir="${dist.configuration}">
+                                    <fileset dir="../gui/configuration/">
+                                        <include name="*.xml"/>
+                                        <include name="*.properties"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${dist}/h2">
+                                    <fileset dir="../datamodel/h2/">
+                                        <include name="**/*.*"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${dist}/images">
+                                    <fileset dir="../gui/images/">
+                                        <include name="**/*.*"/>
+                                    </fileset>
+                                </copy>
+
+                                <pathconvert property="libs" pathsep=" ">
+                                    <mapper>
+                                        <chainedmapper>
+                                            <!-- remove absolute path -->
+                                            <flattenmapper/>
+                                        </chainedmapper>
+                                    </mapper>
+                                    <path>
+                                        <!-- dist.lib contains all in servicefeatures -->
+                                        <fileset dir="${dist.lib}">
+                                            <include name="*.jar"/>
+                                        </fileset>
+                                    </path>
+                                </pathconvert>
+
+                                <pathconvert property="configs" pathsep=" configuration/">
+                                    <mapper>
+                                        <chainedmapper>
+                                            <!-- remove absolute path -->
+                                            <flattenmapper/>
+                                        </chainedmapper>
+                                    </mapper>
+                                    <path>
+                                        <!-- dist.lib contains all in servicefeatures -->
+                                        <fileset dir="${dist}">
+                                            <include name="configuration/*.*"/>
+                                        </fileset>
+                                    </path>
+                                </pathconvert>
+
+                                <jar destfile="${dist.lib}/coinmanager-all.jar">
+                                    <manifest>
+                                        <attribute name="Class-Path" value="${libs}"/>
+                                    </manifest>
+                                </jar>
+
+                                <jar destfile="${dist}/coinmanager-${project.version}.jar">
+                                    <manifest>
+                                        <attribute name="Class-Path" value="lib/coinmanager-all.jar images/ configuration/ configuration/${configs}"/>
+                                        <attribute name="Main-Class" value="at.priesch.coinmanager.gui.StartScreen"/>
+                                    </manifest>
+                                </jar>
+
+                                <echo>Mintmanager _Master Build File master build process: Leaving {assemble}</echo>
+
+                                <echo>Mintmanager _Master Build File master build process: Entering {cleanup}</echo>
+
+                                <delete dir="${temp}"/>
+
+                                <echo>Mintmanager _Master Build File master build process: Leaving {cleanup}</echo>
+
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <modules>
+    </modules>
+</project>
