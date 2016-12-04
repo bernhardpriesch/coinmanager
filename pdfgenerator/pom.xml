@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>at.priesch.coinmanager</groupId>
     <artifactId>pdfgenerator</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <name>Coinmanager - PDFGenerator</name>
     <description>Generates a PDF from the coins.</description>
     <dependencies>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>at.priesch.coinmanager</groupId>
             <artifactId>servicecomponents</artifactId>
-            <version>1.0.1</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

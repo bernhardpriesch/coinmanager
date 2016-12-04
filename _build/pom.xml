@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>at.priesch.coinmanager</groupId>
     <artifactId>_build</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
     <name>Master Build</name>
 

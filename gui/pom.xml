@@ -5,7 +5,7 @@
     <groupId>at.priesch.coinmanager</groupId>
     <artifactId>gui</artifactId>
     <name>Coinmanager - GUI</name>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 
     <properties>
 
@@ -18,47 +18,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.jmx</groupId>
-                    <artifactId>jmxri</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.jdmk</groupId>
-                    <artifactId>jmxtools</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.jms</groupId>
-                    <artifactId>jms</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.mail</groupId>
-                    <artifactId>mail</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!--
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>ejb3-persistence</artifactId>
-            <version>3.3.2.Beta1</version>
-            <scope>compile</scope>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.193</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>at.priesch.coinmanager</groupId>
             <artifactId>servicecomponents</artifactId>
-            <version>1.0.1</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -170,14 +132,14 @@
                                 </copy>
 
                                 <copy todir="${dist.lib}">
-                                    <fileset dir="../gui/target/">
+                                    <fileset dir="./target/">
                                         <include name="*.jar"/>
                                     </fileset>
                                 </copy>
                                 -->
 
                                 <copy todir="${dist.configuration}">
-                                    <fileset dir="../gui/configuration/">
+                                    <fileset dir="./configuration/">
                                         <include name="*.xml"/>
                                         <include name="*.properties"/>
                                     </fileset>
@@ -190,8 +152,14 @@
                                 </copy>
 
                                 <copy todir="${dist}/images">
-                                    <fileset dir="../gui/images/">
+                                    <fileset dir="./images/">
                                         <include name="**/*.*"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${dist}/">
+                                    <fileset dir="./">
+                                        <include name="**/run.*"/>
                                     </fileset>
                                 </copy>
 

@@ -1,1 +1,0 @@
-java -Xmx1g -jar coinmanager-1.0.1.jar
