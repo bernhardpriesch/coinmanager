@@ -95,7 +95,7 @@
                                 <tstamp/>
 
                                 <echo>-----------------------------------------------------</echo>
-                                <echo>Building: I-New CS IProvisioningr</echo>
+                                <echo>Building: Coinmanager</echo>
                                 <echo>Destination: ${dist}</echo>
                                 <echo>-----------------------------------------------------</echo>
 
