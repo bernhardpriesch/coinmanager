@@ -145,12 +145,6 @@
                                     </fileset>
                                 </copy>
 
-                                <copy todir="${dist}/h2">
-                                    <fileset dir="../datamodel/h2/">
-                                        <include name="**/*.*"/>
-                                    </fileset>
-                                </copy>
-
                                 <copy todir="${dist}/images">
                                     <fileset dir="./images/">
                                         <include name="**/*.*"/>
