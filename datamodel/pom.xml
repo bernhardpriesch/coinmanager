@@ -2,7 +2,7 @@
 <modelVersion>4.0.0</modelVersion>
     <groupId>at.priesch.coinmanager</groupId>
     <artifactId>datamodel</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0-SNAPSHOT</version>
     <name>Coinmanager - Datamodel</name>
     <description>Datamodel for Coinmanager</description>
     <dependencies>
@@ -51,6 +51,33 @@
     </dependencies>
     <build>
         <finalName>coinmanger-datamodel-${project.version}</finalName>
+
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

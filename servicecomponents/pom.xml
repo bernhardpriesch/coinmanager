@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>at.priesch.coinmanager</groupId>
     <artifactId>servicecomponents</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0-SNAPSHOT</version>
     <name>Coinmanager - Servicecomponents</name>
     <description>Servicecomponents for Coinmanager</description>
     <dependencies>
