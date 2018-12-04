@@ -2,16 +2,16 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>at.priesch.coinmanager</groupId>
-    <artifactId>_build</artifactId>
+    <artifactId>coinmananger</artifactId>
     <version>1.1.0</version>
     <packaging>pom</packaging>
-    <name>Master Build</name>
+    <name>Coinmanager</name>
 
     <modules>
-        <module>../datamodel</module>
-        <module>../gui</module>
-        <module>../servicecomponents</module>
-        <module>../pdfgenerator</module>
+        <module>datamodel</module>
+        <module>gui</module>
+        <module>servicecomponents</module>
+        <module>pdfgenerator</module>
     </modules>
 
 </project>
