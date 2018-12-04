@@ -5,12 +5,12 @@ The current rates of the materials and currencies can be edited, so the callcula
 
 Basically it should help to gain again an overview of the collection of coins. 
 
-#Getting startet
-##Prerequisites:
+## Getting startet
+### Prerequisites:
 
-    The only prerequisite is that Java is installed. It can be downloaded here.  
+    The only prerequisite is that Java is installed.
 
-###Install and run the coinmanager app:
+#### Install and run the coinmanager app:
 
     Download the latest release of coinmanager from http://sourceforge.net/projects/coinmanager/ 
     Extract it to the folder of your choice
@@ -18,19 +18,19 @@ Basically it should help to gain again an overview of the collection of coins.
 
     That's all, have fun! 
 
-##Release notes
+## Release notes
 
-###1.1.0
+### 1.1.0
     - updated libs
     - autogenerate materials and currencies
 
-###1.0.1
+### 1.0.1
     - bug fix for search filter on materials
     - bug fix for order search results
     - bug fix for UI
     - added auto update function for currency exchange rates
 
-###1.0.0
+### 1.0.0
 
     - add coins
     - edit coins
