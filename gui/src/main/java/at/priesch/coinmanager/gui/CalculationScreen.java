@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import javax.persistence.EntityManager;
@@ -84,24 +85,24 @@ public class CalculationScreen
     	coinManager = new Coinmanager ();
     	numberFormat = NumberFormat.getCurrencyInstance ();
     	numberFormat.setGroupingUsed (true);
-    	countSilver.setText (String.valueOf (coinManager.countCoins (entityManager, MaterialName.AG)));
-    	countGold.setText (String.valueOf (coinManager.countCoins (entityManager, MaterialName.AU)));
-    	countPlatin.setText (String.valueOf (coinManager.countCoins (entityManager, MaterialName.PT)));
+    	countSilver.setText (String.valueOf (coinManager.countCoins (entityManager, Arrays.asList (MaterialName.AG))));
+    	countGold.setText (String.valueOf (coinManager.countCoins (entityManager, Arrays.asList (MaterialName.AU))));
+    	countPlatin.setText (String.valueOf (coinManager.countCoins (entityManager, Arrays.asList (MaterialName.PT))));
     	countSum.setText (String.valueOf (coinManager.countCoins (entityManager, null)));
     	
-    	silverDenomination.setText (String.valueOf (numberFormat.format (coinManager.calculateDenominatioin (entityManager, MaterialName.AG))));
-    	goldDenomination.setText (String.valueOf (numberFormat.format (coinManager.calculateDenominatioin (entityManager, MaterialName.AU))));
-    	platinDenomination.setText (String.valueOf (numberFormat.format (coinManager.calculateDenominatioin (entityManager, MaterialName.PT))));
+    	silverDenomination.setText (String.valueOf (numberFormat.format (coinManager.calculateDenominatioin (entityManager, Arrays.asList (MaterialName.AG)))));
+    	goldDenomination.setText (String.valueOf (numberFormat.format (coinManager.calculateDenominatioin (entityManager, Arrays.asList (MaterialName.AU)))));
+    	platinDenomination.setText (String.valueOf (numberFormat.format (coinManager.calculateDenominatioin (entityManager, Arrays.asList (MaterialName.PT)))));
     	sumDenomination.setText (String.valueOf (numberFormat.format (coinManager.calculateDenominatioin (entityManager, null))));
     	
-    	silverMaterial.setText (String.valueOf (numberFormat.format (coinManager.calculateMaterial (entityManager, MaterialName.AG))));
-    	goldMaterial.setText (String.valueOf (numberFormat.format (coinManager.calculateMaterial (entityManager, MaterialName.AU))));
-    	platinMaterial.setText (String.valueOf (numberFormat.format (coinManager.calculateMaterial (entityManager, MaterialName.PT))));
+    	silverMaterial.setText (String.valueOf (numberFormat.format (coinManager.calculateMaterial (entityManager, Arrays.asList (MaterialName.AG)))));
+    	goldMaterial.setText (String.valueOf (numberFormat.format (coinManager.calculateMaterial (entityManager, Arrays.asList (MaterialName.AU)))));
+    	platinMaterial.setText (String.valueOf (numberFormat.format (coinManager.calculateMaterial (entityManager, Arrays.asList (MaterialName.PT)))));
     	sumMaterial.setText (String.valueOf (numberFormat.format (coinManager.calculateMaterial (entityManager, null))));
     	
-    	silverEstimatedValue.setText (String.valueOf (numberFormat.format (coinManager.calculateEstimatedValue (entityManager, MaterialName.AG))));
-        goldEstimatedValue.setText (String.valueOf (numberFormat.format (coinManager.calculateEstimatedValue (entityManager, MaterialName.AU))));
-        platinEstimatedValue.setText (String.valueOf (numberFormat.format (coinManager.calculateEstimatedValue (entityManager, MaterialName.PT))));
+    	silverEstimatedValue.setText (String.valueOf (numberFormat.format (coinManager.calculateEstimatedValue (entityManager, Arrays.asList (MaterialName.AG)))));
+        goldEstimatedValue.setText (String.valueOf (numberFormat.format (coinManager.calculateEstimatedValue (entityManager, Arrays.asList (MaterialName.AU)))));
+        platinEstimatedValue.setText (String.valueOf (numberFormat.format (coinManager.calculateEstimatedValue (entityManager, Arrays.asList (MaterialName.PT)))));
         sumEstimatedValue.setText (String.valueOf (numberFormat.format (coinManager.calculateEstimatedValue (entityManager, null))));
     }
 

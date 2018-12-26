@@ -20,6 +20,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import at.priesch.coinmanager.pdfgenerator.PDFGenerator;
+import at.priesch.coinmanager.servicecomponents.Coinmanager;
 import org.apache.log4j.Logger;
 
 /**
@@ -35,14 +37,15 @@ public class StartScreen
 	private static final long serialVersionUID = 1L;
 	
 	private Logger  logger      = Logger.getLogger (getClass ());  //  @jve:decl-index=0:
-	
-	private JPanel content = null;
-	private JButton add = null;
-	private static StartScreen screen = null;
-	private AddScreen addScreen = null;
-	private SearchScreen searchScreen = null;
-	private SettingsScreen settingsScreen = null;
-	private CalculationScreen calculationScreen = null;
+
+    private        JPanel              content             = null;
+    private        JButton             add                 = null;
+    private static StartScreen         screen              = null;
+    private        AddScreen           addScreen           = null;
+    private        SearchScreen        searchScreen        = null;
+    private        SettingsScreen      settingsScreen      = null;
+    private        CalculationScreen   calculationScreen   = null;
+    private        PdfGenerationScreen pdfGenerationScreen = null;
 	
 	private EntityManagerFactory    entityManagerFactory    = null;  //  @jve:decl-index=0:
 	private EntityManager           entityManager           = null;  //  @jve:decl-index=0:
@@ -62,6 +65,8 @@ public class StartScreen
     private JButton calculate = null;
 
     private JButton settings = null;
+
+    private JButton pdf = null;
 
     private JLabel logo = null;
 	
@@ -104,7 +109,7 @@ public class StartScreen
         }
         resources = ResourceBundle.getBundle("coinmanager", currentLocale);
         
-        this.setSize(new Dimension(443, 494));
+        this.setSize(new Dimension(443, 594));
         this.setContentPane(getContent());
         this.setTitle("Coinmanager");
         this.setResizable (false);
@@ -137,12 +142,13 @@ public class StartScreen
 			logo.setIcon (new ImageIcon(new ImageIcon("images/CoinmanagerLogo.png").getImage ().getScaledInstance (logo.getWidth (), logo.getHeight (), Image.SCALE_AREA_AVERAGING)));
 			content = new JPanel();
 			content.setLayout(null);
-			content.setPreferredSize(new Dimension(538, 234));
+			content.setPreferredSize(new Dimension(538, 334));
 			content.setBackground(new Color(205, 216, 249));
 			content.add(getAdd(), null);
 			content.add(getSearch(), null);
 			content.add(getCalculate(), null);
 			content.add(getSettings(), null);
+            content.add(getPdf (), null);
 			content.add(logo, null);
 		}
 		return content;
@@ -162,7 +168,6 @@ public class StartScreen
 			add = new JButton();
 			add.setBorder (null);
 			add.setBackground(new Color(205, 216, 249));
-			add.setBounds(new Rectangle(76, 224, 90, 90));
 			add.setToolTipText(resources.getString ("addButton"));
 			add.setBounds(new Rectangle(76, 200, 90, 90));
 			add.setIcon(icon);
@@ -191,7 +196,6 @@ public class StartScreen
             icon1.setImage(icon1.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH));
             search = new JButton ();
             search.setBorder(null);
-            search.setBounds(new Rectangle(271, 224, 90, 90));
             search.setToolTipText(resources.getString ("searchButton"));
             search.setBounds(new Rectangle(271, 200, 90, 90));
             search.setIcon(icon1);
@@ -221,7 +225,6 @@ public class StartScreen
             ImageIcon icon2 = new ImageIcon("images/calculate.png");
             icon2.setImage(icon2.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH));
             calculate = new JButton ();
-            calculate.setBounds(new Rectangle(76, 359, 90, 90));
             calculate.setBorder(null);
             calculate.setToolTipText(resources.getString ("calculateButton"));
             calculate.setBounds(new Rectangle(76, 335, 90, 90));
@@ -252,7 +255,6 @@ public class StartScreen
             ImageIcon icon21 = new ImageIcon("images/settings.png");
             icon21.setImage(icon21.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH));
             settings = new JButton ();
-            settings.setBounds(new Rectangle(271, 359, 90, 90));
             settings.setBorder(null);
             settings.setToolTipText(resources.getString ("settingsButton"));
             settings.setBounds(new Rectangle(271, 335, 90, 90));
@@ -269,6 +271,36 @@ public class StartScreen
             });
         }
         return settings;
+    }
+
+    /**
+     * This method initializes settings
+     *
+     * @return javax.swing.JButton
+     */
+    private JButton getPdf ()
+    {
+        if (pdf == null)
+        {
+            ImageIcon icon21 = new ImageIcon("images/pdf.png");
+            icon21.setImage(icon21.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH));
+            pdf = new JButton ();
+            pdf.setBorder(null);
+            pdf.setToolTipText(resources.getString ("pdfButton"));
+            pdf.setBounds(new Rectangle(170, 450, 90, 90));
+            pdf.setIcon(icon21);
+            pdf.setBackground(new Color(205, 216, 249));
+            pdf.addActionListener (new java.awt.event.ActionListener ()
+            {
+                public void actionPerformed (java.awt.event.ActionEvent e)
+                {
+                    pdfGenerationScreen = new PdfGenerationScreen (entityManager, resources);
+                    pdfGenerationScreen.setFont (font);
+                    pdfGenerationScreen.setVisible(true);
+                }
+            });
+        }
+        return pdf;
     }
 
     public static void main(final String[] args)

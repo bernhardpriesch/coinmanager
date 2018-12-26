@@ -23,6 +23,12 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>at.priesch.coinmanager</groupId>
+            <artifactId>pdfgenerator</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <description>GUI of Coinmanager</description>
 
@@ -142,6 +148,7 @@
                                     <fileset dir="./configuration/">
                                         <include name="*.xml"/>
                                         <include name="*.properties"/>
+                                        <include name="**/*.*"/>
                                     </fileset>
                                 </copy>
 
@@ -154,6 +161,12 @@
                                 <copy todir="${dist}/">
                                     <fileset dir="./">
                                         <include name="**/run.*"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${dist.configuration}">
+                                    <fileset dir="../pdfgenerator/configuration/">
+                                        <include name="**/*.*"/>
                                     </fileset>
                                 </copy>
 

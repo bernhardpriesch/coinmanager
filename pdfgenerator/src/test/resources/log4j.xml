@@ -9,23 +9,6 @@
 		</layout>
 	</appender>
 
-	<appender name="RollingFile" class="org.apache.log4j.RollingFileAppender">
-		<param name="file" value="log/coinmanager.log" />
-		<param name="MaxFileSize" value="1MB" />
-		<param name="MaxBackupIndex" value="10" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="[%d{ISO8601}][%-5p][%-50c{1}][%x] %m%n" />
-		</layout>
-	</appender>
-
-	<appender name="DailyFile" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="log/coinmanager.log" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{ISO8601} %-5p [%-15t][%-50c{1}][%x] %m%n" />
-		</layout>
-	</appender>
-
 	<category name="org">
 		<priority value="INFO" />
 	</category>
@@ -53,7 +36,6 @@
 	<root>
 		<priority value="TRACE" />
  		<appender-ref ref="Console" />
-		<appender-ref ref="DailyFile" />
 	</root>
 
 </log4j:configuration>

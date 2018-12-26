@@ -16,8 +16,6 @@ import java.util.Map;
 
 import javax.persistence.*;
 
-//import org.hibernate.annotations.CollectionOfElements;
-
 /**
  * @author Bernhard PRIESCH
  */
@@ -29,6 +27,7 @@ import javax.persistence.*;
 				@NamedQuery (name = "FindCoinByYear", query = "SELECT c FROM Coin c WHERE c.year=:year"),
 				@NamedQuery (name = "GetCoins", query = "SELECT c FROM Coin c"),
 				@NamedQuery (name = "GetCoinsByName", query = "SELECT c FROM Coin c WHERE c.name LIKE :pattern ORDER BY c.name"),
+				@NamedQuery (name = "GetCoinsForYear", query = "SELECT c FROM Coin c WHERE c.year = :year"),
 				@NamedQuery (name = "GetCountCoins", query = "SELECT COUNT(*) FROM Coin c")
 	})
 public class Coin
@@ -98,11 +97,16 @@ public class Coin
 		this.year = year;
 	}
 
-	//@Column		(name="materials", nullable=true)
-	//@CollectionOfElements
-	@Column		(name="materials", nullable=true)
+//	@Column		(name="materials", nullable=true)
+//	@CollectionOfElements
 	@ElementCollection
-	public Map<Material, Double> getMaterials() {
+	@MapKeyClass (value = Material.class)
+
+	@MapKeyJoinColumn (name = "MAPKEY_ID")
+	@CollectionTable (name = "Coin_materials", joinColumns = @JoinColumn (name = "COIN_ID"))
+	@Column (name = "materials", nullable = true)
+	public Map<Material, Double> getMaterials ()
+	{
 		return materials;
 	}
 

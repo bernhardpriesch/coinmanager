@@ -1,9 +1,6 @@
 package at.priesch.coinmanager.servicecomponents;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
@@ -23,6 +20,44 @@ import at.priesch.coinmanager.servicecomponents.valueobjects.VOMaterial;
  */
 public class Coinmanager
 {
+
+
+    public List<VOMaterial> getMaterials (final EntityManager entityManager, final ResourceBundle resources)
+    {
+        List<VOMaterial> retValue = new ArrayList<> ();
+        VOMaterial voMaterial = null;
+        Query query = null;
+        EntityTransaction transaction = null;
+
+        transaction = entityManager.getTransaction ();
+        transaction.begin ();
+
+        query = entityManager.createNamedQuery ("GetMaterials");
+
+        for (Material material : (List<Material>)query.getResultList ())
+        {
+            voMaterial = new VOMaterial ();
+            voMaterial.id   = material.getId ();
+            voMaterial.name = material.getName ();
+            voMaterial.rate = material.getRate ();
+            voMaterial.setResources (resources);
+            retValue.add (voMaterial);
+        }
+        try
+        {
+            transaction.commit ();
+        }
+        catch (Exception e)
+        {
+            if (null != transaction && transaction.isActive ())
+            {
+                transaction.rollback ();
+            }
+        }
+
+        return retValue;
+    }
+
     @SuppressWarnings ("unchecked")
     public List<VOCoin> getCoins (final EntityManager entityManager)
     {
@@ -201,14 +236,14 @@ public class Coinmanager
     }
 
     @SuppressWarnings ("unchecked")
-    public long countCoins (final EntityManager entityManager, final MaterialName material)
+    public long countCoins (final EntityManager entityManager, final List<MaterialName> materials)
     {
         long retValue = 0;
         Query query = null;
-        boolean counted = false;
+        boolean countable = true;
         List<Coin> coins = null;
 
-        if (material == null)
+        if (materials == null)
         {
             query = entityManager.createNamedQuery ("GetCountCoins");
             retValue = (Long)query.getSingleResult ();
@@ -222,13 +257,17 @@ public class Coinmanager
             {
                 for (Entry<Material, Double> mEntry : coin.getMaterials ().entrySet ())
                 {
-                    if ((material == null || mEntry.getKey ().getName () == material) && !counted)
+                    if (!materials.contains (mEntry.getKey ().getName ()) || materials.size () != coin.getMaterials ().size ())
                     {
-                        counted = true;
-                        retValue++;
+                        countable = false;
+                        break;
                     }
                 }
-                counted = false;
+                if (countable)
+                {
+                    retValue++;
+                }
+                countable = true;
             }
         }
 
@@ -236,51 +275,122 @@ public class Coinmanager
     }
 
     @SuppressWarnings ("unchecked")
-    public double calculateDenominatioin (final EntityManager entityManager, final MaterialName material)
+    public double calculateDenominatioin (final EntityManager entityManager, final List<MaterialName> materials)
     {
         double retValue = 0;
         List<Coin> coins = null;
         Query query = null;
-        boolean counted = false;
+        boolean countable = true;
 
         query = entityManager.createNamedQuery ("GetCoins");
         coins = (List<Coin>)query.getResultList ();
 
         for (Coin coin : coins)
         {
-            for (Entry<Material, Double> mEntry : coin.getMaterials ().entrySet ())
+            if (null != materials)
             {
-                if ((material == null || mEntry.getKey ().getName () == material) && !counted)
+                for (Entry<Material, Double> mEntry : coin.getMaterials ().entrySet ())
                 {
-                    counted = true;
-                    retValue += coin.getDenomination () / coin.getCurrency ().getRate ();
+                    if (!materials.contains (mEntry.getKey ().getName ()) || materials.size () != coin.getMaterials ().size ())
+                    {
+                        countable = false;
+                        break;
+                    }
                 }
             }
-            counted = false;
+            if (countable)
+            {
+                retValue += coin.getDenomination () / coin.getCurrency ().getRate ();
+            }
+            countable = true;
+
         }
 
         return retValue;
     }
 
     @SuppressWarnings ("unchecked")
-    public double calculateMaterial (final EntityManager entityManager, final MaterialName material)
+    public double calculateMaterial (final EntityManager entityManager, final List<MaterialName> materials)
     {
         double retValue = 0;
         List<Coin> coins = null;
         Query query = null;
         boolean materialFound = false;
-        boolean counted = false;
+        boolean countable = true;
 
         query = entityManager.createNamedQuery ("GetCoins");
         coins = (List<Coin>)query.getResultList ();
 
         for (Coin coin : coins)
         {
-            for (Entry<Material, Double> mEntry : coin.getMaterials ().entrySet ())
+            if (null != materials)
             {
-                if ((material == null || mEntry.getKey ().getName () == material) && !counted)
+                for (Entry<Material, Double> mEntry : coin.getMaterials ().entrySet ())
                 {
-                    counted = true;
+                    if (!materials.contains (mEntry.getKey ().getName ()) || materials.size () != coin.getMaterials ().size ())
+                    {
+                        countable = false;
+                        break;
+                    }
+                }
+            }
+            if (countable)
+            {
+                for (Entry<Material, Double> entry : coin.getMaterials ().entrySet ())
+                {
+                    if (entry.getValue () != -1)
+                    {
+                        retValue += ((entry.getKey ().getRate () / 31.1034768) * entry.getValue ());
+                        materialFound = true;
+                    }
+                }
+
+                if (!materialFound)
+                {
+                    retValue += coin.getDenomination () / coin.getCurrency ().getRate ();
+
+                }
+                materialFound = false;
+            }
+            countable = true;
+        }
+
+        return retValue;
+    }
+
+    @SuppressWarnings ("unchecked")
+    public double calculateEstimatedValue (final EntityManager entityManager, final List<MaterialName> materials)
+    {
+        double retValue = 0;
+        List<Coin> coins = null;
+        Query query = null;
+        boolean materialFound = false;
+        boolean countable = true;
+
+        query = entityManager.createNamedQuery ("GetCoins");
+        coins = (List<Coin>)query.getResultList ();
+
+        for (Coin coin : coins)
+        {
+            if (null != materials)
+            {
+                for (Entry<Material, Double> mEntry : coin.getMaterials ().entrySet ())
+                {
+                    if (!materials.contains (mEntry.getKey ().getName ()) || materials.size () != coin.getMaterials ().size ())
+                    {
+                        countable = false;
+                        break;
+                    }
+                }
+            }
+            if (countable)
+            {
+                if (coin.getEstimatedValue () != -1)
+                {
+                    retValue += coin.getEstimatedValue ();
+                }
+                else
+                {
                     for (Entry<Material, Double> entry : coin.getMaterials ().entrySet ())
                     {
                         if (entry.getValue () != -1)
@@ -293,59 +403,10 @@ public class Coinmanager
                     if (!materialFound)
                     {
                         retValue += coin.getDenomination () / coin.getCurrency ().getRate ();
-
-                    }
-                    materialFound = false;
-                }
-            }
-            counted = false;
-        }
-
-        return retValue;
-    }
-
-    @SuppressWarnings ("unchecked")
-    public double calculateEstimatedValue (final EntityManager entityManager, final MaterialName material)
-    {
-        double retValue = 0;
-        List<Coin> coins = null;
-        Query query = null;
-        boolean materialFound = false;
-        boolean counted = false;
-
-        query = entityManager.createNamedQuery ("GetCoins");
-        coins = (List<Coin>)query.getResultList ();
-
-        for (Coin coin : coins)
-        {
-            for (Entry<Material, Double> mEntry : coin.getMaterials ().entrySet ())
-            {
-                if ((material == null || mEntry.getKey ().getName () == material) && !counted)
-                {
-                    counted = true;
-                    if (coin.getEstimatedValue () != -1)
-                    {
-                        retValue += coin.getEstimatedValue ();
-                    }
-                    else
-                    {
-                        for (Entry<Material, Double> entry : coin.getMaterials ().entrySet ())
-                        {
-                            if (entry.getValue () != -1)
-                            {
-                                retValue += ((entry.getKey ().getRate () / 31.1034768) * entry.getValue ());
-                                materialFound = true;
-                            }
-                        }
-
-                        if (!materialFound)
-                        {
-                            retValue += coin.getDenomination () / coin.getCurrency ().getRate ();
-                        }
                     }
                 }
             }
-            counted = false;
+            countable = true;
         }
 
         return retValue;
@@ -445,6 +506,68 @@ public class Coinmanager
 
         query = entityManager.createNamedQuery ("GetCoinsByName");
         query.setParameter ("pattern", "%" + pattern + "%");
+
+        retValue = new ArrayList<VOCoin> ();
+
+        for (Coin coin : (List<Coin>)query.getResultList ())
+        {
+            voCoin = new VOCoin ();
+            voCoin.id = coin.getId ();
+            voCoin.name = coin.getName ();
+            voCoin.denomination = coin.getDenomination ();
+            voCoin.year = coin.getYear ();
+            voCoin.estimatedValue = coin.getEstimatedValue ();
+            voCoin.front = coin.getFront ();
+            voCoin.back = coin.getBack ();
+
+            voCurrency = new VOCurrency ();
+            voCurrency.id = coin.getCurrency ().getId ();
+            voCurrency.name = coin.getCurrency ().getName ();
+            voCurrency.rate = coin.getCurrency ().getRate ();
+
+            voCoin.currency = voCurrency;
+
+            for (Entry<Material, Double> entry : coin.getMaterials ().entrySet ())
+            {
+                voMaterial = new VOMaterial ();
+                voMaterial.id = entry.getKey ().getId ();
+                voMaterial.name = entry.getKey ().getName ();
+                voMaterial.rate = entry.getKey ().getRate ();
+
+                voCoin.materials.put (voMaterial, entry.getValue ());
+            }
+
+            retValue.add (voCoin);
+        }
+        try
+        {
+            transaction.commit ();
+        }
+        catch (Exception e)
+        {
+            if (null != transaction && transaction.isActive ())
+            {
+                transaction.rollback ();
+            }
+        }
+
+        return retValue;
+    }
+
+    public List<VOCoin> getCoinsForYear (final EntityManager entityManager, final int year)
+    {
+        List<VOCoin> retValue = null;
+        VOCoin voCoin = null;
+        VOCurrency voCurrency = null;
+        VOMaterial voMaterial = null;
+        Query query = null;
+        EntityTransaction transaction = null;
+
+        transaction = entityManager.getTransaction ();
+        transaction.begin ();
+
+        query = entityManager.createNamedQuery ("GetCoinsForYear");
+        query.setParameter ("year", year);
 
         retValue = new ArrayList<VOCoin> ();
 

@@ -1,12 +1,17 @@
 package at.priesch.coinmanager.pdfgenerator;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 
+import at.priesch.coinmanager.datamodel.Coin;
+import at.priesch.coinmanager.datamodel.Currency;
+import at.priesch.coinmanager.datamodel.Material;
+import at.priesch.coinmanager.datamodel.datatypes.MaterialName;
+import at.priesch.coinmanager.servicecomponents.Currencymanager;
+import at.priesch.coinmanager.servicecomponents.Materialmanager;
+import at.priesch.coinmanager.servicecomponents.valueobjects.VOCoin;
+import at.priesch.coinmanager.servicecomponents.valueobjects.VOMaterial;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -14,8 +19,13 @@ import org.junit.Test;
 
 import at.priesch.coinmanager.servicecomponents.Coinmanager;
 
+import static org.junit.Assert.fail;
+
 public class PDFGeneratorTest
 {
+    private Currencymanager currencymanager = null;
+    private Coinmanager coinmanager =null;
+    Materialmanager materialmanager = null;
     private EntityManagerFactory    entityManagerFactory    = null;
     private EntityManager           entityManager           = null;
 
@@ -55,6 +65,12 @@ public class PDFGeneratorTest
             // Start EntityManagerFactory
             entityManagerFactory    = Persistence.createEntityManagerFactory ("COINMANAGER", persistenceProperties);
             entityManager           = entityManagerFactory.createEntityManager ();
+            currencymanager = new Currencymanager ();
+
+            materialmanager = new Materialmanager ();
+
+            coinmanager = new Coinmanager ();
+
         }
         catch (Exception e)
         {
@@ -63,6 +79,29 @@ public class PDFGeneratorTest
             throw   e;
         }
 
+    }
+
+    public void createCoin ()
+    {
+        VOCoin coin = null;
+        Map<VOMaterial, Double> materials = new HashMap<> ();
+
+        try
+        {
+            materials.put (materialmanager.getMaterials (entityManager).get (0), 18.0);
+            coin = new VOCoin ();
+            coin.name = "Test";
+            coin.currency = currencymanager.getCurrencies (entityManager).get (0);
+            coin.denomination = 50.0;
+            coin.estimatedValue = 65.0;
+            coin.materials = materials;
+            coin.year = 2018;
+            coinmanager.addCoin (coin, entityManager);
+        }
+        catch (Exception e)
+        {
+            fail (e.toString ());
+        }
     }
 
     @After
@@ -85,8 +124,20 @@ public class PDFGeneratorTest
     @Test
     public void testCreatePDF()
     {
+        System.setProperty("file.encoding", "UTF-8");
+
         PDFGenerator generator = new PDFGenerator ();
-        
-        generator.createPDF (new Coinmanager (), entityManager);
+
+        generator.createPDF (new Coinmanager (), ResourceBundle.getBundle("coinmanager", new Locale("de")), entityManager, 2014, 2015);
+    }
+
+    @Test
+    public void testFetchWithMultipleMaterials ()
+    {
+        logger.info ("Coins: " + coinmanager.countCoins (entityManager, Arrays.asList (MaterialName.NB)));
+        logger.info ("Coins: " + coinmanager.countCoins (entityManager, Arrays.asList (MaterialName.AG, MaterialName.NB)));
+
+        logger.info ("Coins: " + coinmanager.countCoins (entityManager, Arrays.asList (MaterialName.TI)));
+        logger.info ("Coins: " + coinmanager.countCoins (entityManager, Arrays.asList (MaterialName.AG, MaterialName.TI)));
     }
 }

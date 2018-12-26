@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="Console" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{ISO8601}][%-5p][%-50c{1}][%x] %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="RollingFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="log/coinmanager.log" />
+		<param name="MaxFileSize" value="1MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{ISO8601}][%-5p][%-50c{1}][%x] %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="DailyFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="log/coinmanager.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ISO8601} %-5p [%-15t][%-50c{1}][%x] %m%n" />
+		</layout>
+	</appender>
+
+	<category name="org">
+		<priority value="WARN" />
+	</category>
+
+	<category name="com">
+		<priority value="WARN" />
+	</category>
+
+	<category name="java">
+		<priority value="WARN" />
+	</category>
+
+	<category name="javax">
+		<priority value="WARN" />
+	</category>
+
+	<category name="org.apache.activemq">
+		<priority value="WARN" />
+	</category>
+
+	<category name="at.priesch">
+		<priority value="TRACE" />
+	</category>
+	
+	<category name="com.inewcs.in.common.components.watchdog">
+		<priority value="WARN" />
+	</category>
+	
+	<category name="com.inewcs.mamba.pf.common.io.monitoring">
+		<priority value="WARN" />
+	</category>
+
+	<root>
+		<priority value="TRACE" />
+ 		<appender-ref ref="Console" />
+		<appender-ref ref="DailyFile" />
+	</root>
+
+</log4j:configuration>

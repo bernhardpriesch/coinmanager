@@ -31,6 +31,11 @@ public class VOMaterial
         return resources.getString (name.getName ());
     }
 
+    public static String getI18nName (final String name, final ResourceBundle resources)
+    {
+        return resources.getString (name);
+    }
+
     public void setResources (final ResourceBundle resources)
     {
         this.resources = resources;

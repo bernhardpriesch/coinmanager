@@ -7,11 +7,22 @@ import at.priesch.coinmanager.servicecomponents.valueobjects.VOCoin;
 
 public class Page
 {
+    private String       year  = "Unknown";
     private List<VOCoin> coins = new ArrayList<VOCoin> ();
     
     public Page ()
     {
         //nothing to do
+    }
+
+    public String getYear ()
+    {
+        return year;
+    }
+
+    public void setYear (final String year)
+    {
+        this.year = year;
     }
 
     public List<VOCoin> getCoins ()
